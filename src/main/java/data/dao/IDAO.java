@@ -9,6 +9,6 @@ public interface IDAO<T> {
     void create(T t);
 
     List<T> listAll();
-    T getByID(T t);
+    T getByID(int id);
 
 }
