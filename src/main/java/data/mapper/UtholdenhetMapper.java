@@ -8,6 +8,6 @@ import java.sql.SQLException;
 
 public class UtholdenhetMapper implements RowMapper<Utholdenhet> {
     public Utholdenhet mapRow(ResultSet resultSet, int i) throws SQLException {
-        return new Utholdenhet(resultSet.getInt("id"), resultSet.getFloat("lengde"), resultSet.getString("type"));
+        return new Utholdenhet(resultSet.getInt("id"), resultSet.getFloat("lengde"), resultSet.getString("enhet"));
     }
 }

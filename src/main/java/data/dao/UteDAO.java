@@ -1,27 +1,81 @@
 package data.dao;
 
+import data.db.DB;
+import data.mapper.UteMapper;
 import data.models.Ute;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UteDAO implements IDAO<Ute> {
-    public void update(Ute ute) {
 
+    public void update(Ute ute) {
+        String sql = "UPDATE Ute SET værforhold=?,værtype=?,temperatur=? WHERE id=?";
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, ute.getVærforhold());
+            st.setString(2, ute.getVærtype());
+            st.setFloat(2, ute.getTemperatur());
+            st.setInt(3, ute.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void delete(Ute ute) {
-
+        String sql = "DELETE FROM Ute WHERE id=?";
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, ute.getId());
+            st.executeUpdate();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void create(Ute ute) {
-
+        String SQL = "INSERT INTO Ute (værforhold, værtype, temperatur) VALUES (?, ?, ?);";
+        try {
+            PreparedStatement ps = DB.getConnection().prepareStatement(SQL);
+            ps.setString(1, ute.getVærforhold());
+            ps.setString(2, ute.getVærtype());
+            ps.setFloat(2, ute.getTemperatur());
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Ute> listAll() {
-        return null;
+        String SQL = "SELECT * FROM Ute;";
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst();
+            List<Ute> uteList = new ArrayList<Ute>();
+            UteMapper mapper = new UteMapper();
+            while (resultSet.next()) {
+                uteList.add(mapper.mapRow(resultSet, resultSet.getRow()));
+            }
+            return uteList;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public Ute getByID(int id) {
-        return null;
+        String SQL = "SELECT * FROM Ute WHERE ID=" + String.valueOf(id) + ";";
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            return new UteMapper().mapRow(resultSet, 0);
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }
