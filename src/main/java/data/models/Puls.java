@@ -15,9 +15,13 @@ public class Puls {
         this.tid = tid;
         this.puls = puls;
         this.lengde = lengde;
-        this.bredde = bredde;
+        this.bredde= bredde;
         this.høyde = høyde;
         this.øktId = øktId;
+    }
+
+    public Puls(){
+
     }
 
     public int getId() {
