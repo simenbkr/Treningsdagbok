@@ -2,6 +2,7 @@ package runtime;
 
 
 import runtime.handler.IHandler;
+import runtime.handler.statistics.StatisticsHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 public class Controller {
 
     private List<IHandler> handlers = new ArrayList<IHandler>(Arrays.asList(new IHandler[]{
-
+            new StatisticsHandler()
     }));
 
     public void run() {
