@@ -1,6 +1,8 @@
 package data.models;
 
-public class Styrke {
+import java.util.Comparator;
+
+public class Styrke implements Comparable<Styrke>{
 
     private int id;
     private float belastning;
@@ -40,5 +42,17 @@ public class Styrke {
 
     public void setReps(int reps) {
         this.reps = reps;
+    }
+
+    public int compareTo(Styrke styrke){
+        float res = this.getBelastning()*this.getReps()*this.getSett() - styrke.getReps()*styrke.getSett()*styrke.getBelastning();
+        if(res < 0){
+            return -1;
+        }
+        else if(res > 0){
+            return 1;
+        }
+        return 0;
+
     }
 }
