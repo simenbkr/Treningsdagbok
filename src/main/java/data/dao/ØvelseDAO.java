@@ -2,6 +2,7 @@ package data.dao;
 
 import data.db.DB;
 import data.mapper.ØvelseMapper;
+import data.models.Kategori;
 import data.models.Øvelse;
 
 import java.sql.PreparedStatement;
@@ -88,5 +89,22 @@ public class ØvelseDAO implements IDAO<Øvelse> {
         }
 
         return øvelses;
+    }
+
+    public List<Kategori> getCategoriesØvelse(Øvelse øvelse){
+        List<Kategori> categories = new ArrayList<Kategori>();
+        String SQL = "SELECT Kategori_id FROM Øvelse_tilhører_Kategori WHERE Øvelses_id=" + String.valueOf(øvelse.getId()) + ";";
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst();
+            KategoriDao kategoriDao = new KategoriDao();
+            while (resultSet.next()){
+                categories.add(kategoriDao.getByID(resultSet.getInt("Kategori_id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
     }
 }

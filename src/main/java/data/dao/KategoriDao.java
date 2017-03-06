@@ -3,7 +3,9 @@ package data.dao;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import data.db.DB;
 import data.mapper.KategoriMapper;
+import data.mapper.ØvelseMapper;
 import data.models.Kategori;
+import data.models.Øvelse;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -86,5 +88,43 @@ public class KategoriDao implements IDAO<Kategori> {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public Kategori getParentCategory(Kategori kategori) {
+        if (kategori.getForeldreId() == 0) return null;
+        return getByID(kategori.getForeldreId());
+    }
+
+    public List<Kategori> getSubCategories(Kategori kategori) {
+        String SQL = "SELECT * FROM Kategori WHERE foreldre_id=" + String.valueOf(kategori.getId()) + ";";
+        List<Kategori> categories = new ArrayList<Kategori>();
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst();
+            KategoriMapper mapper = new KategoriMapper();
+            while (resultSet.next()) {
+                categories.add(mapper.mapRow(resultSet, resultSet.getRow()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+
+    public List<Øvelse> getØvelserInCategory(Kategori kategori){
+        List<Øvelse> øvelses = new ArrayList<Øvelse>();
+        String SQL = "SELECT Øvelses_id FROM Øvelse_tilhører_Kategori WHERE Kategori_id=" + String.valueOf(kategori.getId()) + ";";
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst();
+            ØvelseDAO øvelseDAO = new ØvelseDAO();
+            while (resultSet.next()) {
+                øvelses.add(øvelseDAO.getByID(resultSet.getInt("Øvelses_id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return øvelses;
     }
 }
