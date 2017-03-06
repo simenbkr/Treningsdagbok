@@ -9,6 +9,6 @@ import java.sql.SQLException;
 public class PulsMapper implements RowMapper<Puls> {
     public Puls mapRow(ResultSet resultSet, int i) throws SQLException {
         return new Puls(resultSet.getInt("id"), resultSet.getTimestamp("tid"), resultSet.getInt("puls"),
-                resultSet.getDouble("lengde"), resultSet.getDouble("høyde"), resultSet.getDouble("bredde"), resultSet.getInt("øktId"));
+                resultSet.getDouble("lengde"), resultSet.getDouble("høyde"), resultSet.getDouble("bredde"), resultSet.getInt("Økt_id"));
     }
 }
