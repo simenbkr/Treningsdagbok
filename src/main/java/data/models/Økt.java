@@ -11,6 +11,17 @@ public class Økt {
     private String prestasjon;
     private String notat;
 
+    public Økt(int id, Timestamp tidspunkt, String form) {
+        this.id = id;
+        this.tidspunkt = tidspunkt;
+        this.form = form;
+    }
+
+    public Økt(int id, Timestamp tidspunkt, String form, String notat) {
+        this(id, tidspunkt, form);
+        this.notat = notat;
+    }
+
     public int getId(){
         return this.id;
     }

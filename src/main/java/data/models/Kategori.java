@@ -6,6 +6,16 @@ public class Kategori {
     private String navn;
     private int foreldreId;
 
+    public Kategori(int id, String navn) {
+        this.id = id;
+        this.navn = navn;
+    }
+
+    public Kategori(int id, String navn, int foreldreId) {
+        this(id, navn);
+        this.foreldreId = foreldreId;
+    }
+
     public int getId(){
         return this.id;
     }

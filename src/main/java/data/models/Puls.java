@@ -10,6 +10,16 @@ public class Puls {
     private double lengde, bredde, høyde;
     private int øktId;
 
+    public Puls(int id, Timestamp tid, int puls, double lengde, double høyde, double bredde, int øktId) {
+        this.id = id;
+        this.tid = tid;
+        this.puls = puls;
+        this.lengde = lengde;
+        this.bredde = bredde;
+        this.høyde = høyde;
+        this.øktId = øktId;
+    }
+
     public int getId() {
         return id;
     }
