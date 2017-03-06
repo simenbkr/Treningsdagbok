@@ -82,7 +82,7 @@ public class KategoriDao implements IDAO<Kategori> {
     public Kategori getByID(int id) {
         try {
             ResultSet rad = DB.getConnection().createStatement().executeQuery("SELECT * FROM Kategori WHERE id=" + id + ";");
-            return new KategoriMapper().mapRow(rad,9001);
+            return new KategoriMapper().mapRow(rad,1);
         } catch (SQLException e) {
             return null;
         }
