@@ -74,6 +74,16 @@ public class ØvelseDAO implements IDAO<Øvelse> {
         }
     }
 
+    public Øvelse getByName(String name) {
+        String SQL = "SELECT * FROM Øvelse WHERE name=" + name;
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            return new ØvelseMapper().mapRow(resultSet, 0);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
     public List<Øvelse> getAlternativeØvelser(Øvelse øvelse) throws SQLException {
         List<Øvelse> øvelses = new ArrayList<Øvelse>();
 

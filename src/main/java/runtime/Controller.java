@@ -1,6 +1,7 @@
 package runtime;
 
 
+import runtime.handler.registration.RegistrationHandler;
 import runtime.handler.IHandler;
 import runtime.handler.statistics.StatisticsHandler;
 
@@ -12,7 +13,8 @@ import java.util.Scanner;
 public class Controller {
 
     private List<IHandler> handlers = new ArrayList<IHandler>(Arrays.asList(new IHandler[]{
-            new StatisticsHandler()
+            new StatisticsHandler(),
+            new RegistrationHandler()
     }));
 
     public void run() {
