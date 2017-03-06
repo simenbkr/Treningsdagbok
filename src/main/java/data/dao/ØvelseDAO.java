@@ -72,4 +72,21 @@ public class ØvelseDAO implements IDAO<Øvelse> {
             return null;
         }
     }
+
+    public List<Øvelse> getAlternativeØvelser(Øvelse øvelse) throws SQLException {
+        List<Øvelse> øvelses = new ArrayList<Øvelse>();
+
+        String SQL = "SELECT alternative_id FROM Øvelse_har_alternative WHERE Øvelse_id=" + String.valueOf(øvelse.getId()) + ";";
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst();
+            while (resultSet.next()){
+                øvelses.add(getByID(resultSet.getInt("alternative_id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return øvelses;
+    }
 }
