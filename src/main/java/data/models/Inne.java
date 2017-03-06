@@ -1,17 +1,20 @@
 package data.models;
 
-public class Inne extends Miljø {
+public class Inne {
 
-  private String luft;
-  private int tilskuere;
-  private int inneId;
+    private int id;
+    private String luft;
+    private int tilskuere;
 
-  public Inne(int id, int inneId, String luft, int tilskuere) {
-    super(id);
-    this.inneId = inneId;
-    this.luft = luft;
-    this.tilskuere = tilskuere;
-  }
+    public Inne(int id, String luft, int tilskuere) {
+        this.id = id;
+        this.luft = luft;
+        this.tilskuere = tilskuere;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     public String getLuft() {
         return luft;
