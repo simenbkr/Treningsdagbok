@@ -2,16 +2,18 @@ package data.models;
 
 public class Ute extends Miljø {
 
-    private String værforhold;
-    private String værtype;
-    private float temperatur;
+  private String værforhold;
+  private String værtype;
+  private int uteId;
+  private float temperatur;
 
-    public Ute(int id, String værforhold, String værtype, float temperatur) {
-        super(id);
-        this.værforhold = værforhold;
-        this.værtype = værtype;
-        this.temperatur = temperatur;
-    }
+  public Ute(int id, int uteId, String værforhold, String værtype, float temperatur) {
+    super(id);
+    this.uteId = uteId;
+    this.værforhold = værforhold;
+    this.værtype = værtype;
+    this.temperatur = temperatur;
+  }
 
     public String getVærforhold() {
         return værforhold;
