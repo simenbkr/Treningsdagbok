@@ -1,4 +1,4 @@
-package main.java.runtime;
+package runtime;
 
 public class Controller {
 
