@@ -66,6 +66,7 @@ public class ResultatDAO implements IDAO<Resultat> {
         String SQL = "SELECT * FROM Resultat WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new ResultatMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;

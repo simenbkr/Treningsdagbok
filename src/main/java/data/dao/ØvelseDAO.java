@@ -68,6 +68,7 @@ public class ØvelseDAO implements IDAO<Øvelse> {
         String SQL = "SELECT * FROM Øvelse WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new ØvelseMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;

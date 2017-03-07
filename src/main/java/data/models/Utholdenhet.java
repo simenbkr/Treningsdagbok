@@ -1,6 +1,6 @@
 package data.models;
 
-public class Utholdenhet {
+public class Utholdenhet implements Comparable<Utholdenhet>{
     private int id;
     private float lengde;
     private String enhet;
@@ -29,5 +29,16 @@ public class Utholdenhet {
 
     public void setEnhet(String enhet) {
         this.enhet = enhet;
+    }
+
+    @Override
+    public int compareTo(Utholdenhet utholdenhet) {
+        if(this.lengde > utholdenhet.lengde){
+            return 1;
+        }
+        else if(this.lengde < utholdenhet.lengde){
+            return -1;
+        }
+        return 0;
     }
 }
