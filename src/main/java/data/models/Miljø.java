@@ -1,5 +1,8 @@
 package data.models;
 
+import data.dao.MiljøDAO;
+import data.db.DB;
+
 public class Miljø {
 
     private int id;
@@ -22,6 +25,16 @@ public class Miljø {
     public Miljø(int id, Inne inne) {
         this(inne);
         this.id = id;
+    }
+
+    public static Miljø createAndPersist(Ute ute) {
+        new MiljøDAO().create(new Miljø(ute));
+        return new MiljøDAO().getByID(DB.getLastInsertID("Miljø"));
+    }
+
+    public static Miljø createAndPersist(Inne inne) {
+        new MiljøDAO().create(new Miljø(inne));
+        return new MiljøDAO().getByID(DB.getLastInsertID("Miljø"));
     }
 
     public int getId() {

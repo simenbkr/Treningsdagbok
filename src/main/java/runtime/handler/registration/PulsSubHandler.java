@@ -1,6 +1,5 @@
 package runtime.handler.registration;
 
-import data.dao.PulsDAO;
 import data.models.Puls;
 import data.models.Økt;
 
@@ -65,7 +64,6 @@ public class PulsSubHandler {
         }
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        Puls puls = new Puls(timestamp, pulsMeasurement, longitude, height, latitude, økt.getId());
-        new PulsDAO().create(puls);
+        Puls.createAndPersist(timestamp, pulsMeasurement, longitude, height, latitude, økt.getId());
     }
 }

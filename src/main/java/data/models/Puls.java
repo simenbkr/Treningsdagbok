@@ -1,5 +1,8 @@
 package data.models;
 
+import data.dao.PulsDAO;
+import data.db.DB;
+
 import java.sql.Timestamp;
 
 public class Puls {
@@ -22,6 +25,11 @@ public class Puls {
     public Puls(int id, Timestamp tid, int puls, double lengde, double høyde, double bredde, int øktId) {
         this(tid, puls, lengde, høyde, bredde, øktId);
         this.id = id;
+    }
+
+    public static Puls createAndPersist(Timestamp tid, int puls, double lengde, double høyde, double bredde, int øktId) {
+        new PulsDAO().create(new Puls(tid, puls, lengde, høyde, bredde, øktId));
+        return new PulsDAO().getByID(DB.getLastInsertID("Puls"));
     }
 
     public int getId() {

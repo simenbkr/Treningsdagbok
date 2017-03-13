@@ -49,7 +49,7 @@ public class UteDAO implements IDAO<Ute> {
             PreparedStatement ps = connection.prepareStatement(SQL);
             ps.setString(1, ute.getVærforhold());
             ps.setString(2, ute.getVærtype());
-            ps.setFloat(2, ute.getTemperatur());
+            ps.setFloat(3, ute.getTemperatur());
             ps.execute();
             connection.close();
         } catch (SQLException e) {
