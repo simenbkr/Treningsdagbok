@@ -45,7 +45,12 @@ public class BestHandler implements IHandler {
                 .collect(Collectors.toCollection(ArrayList::new));
 
         Collections.sort(styrkeØktTupplene, (s1,s2) -> s2.getResultat().getStyrke().compareTo(s1.getResultat().getStyrke()));
-        List<ØktTuppel> styrkePrint = styrkeØktTupplene.subList(0,4);
+        List<ØktTuppel> styrkePrint;
+        try {
+            styrkePrint = styrkeØktTupplene.subList(0, 4);
+        } catch(IndexOutOfBoundsException e){
+            styrkePrint = styrkeØktTupplene;
+        }
         String output = "Her er dine beste resultater for perioden:\n";
         int i = 0;
         for (ØktTuppel t : styrkePrint) {
@@ -104,7 +109,13 @@ public class BestHandler implements IHandler {
                         && s1.getØkt().getTidspunkt().compareTo(sluttDato) <= 0)
                 .collect(Collectors.toCollection(ArrayList::new));
         Collections.sort(øktTupplene, (s1,s2) -> s2.getResultat().getUtholdenhet().compareTo(s1.getResultat().getUtholdenhet()));
-        List<ØktTuppel> øktPrint = øktTupplene.subList(0,4);
+
+        List<ØktTuppel> øktPrint;
+        try {
+            øktPrint = øktTupplene.subList(0, 4);
+        } catch(IndexOutOfBoundsException e){
+            øktPrint = øktTupplene;
+        }
         String output = "Her er dine beste resultater for perioden:\n";
         for (ØktTuppel t : øktPrint) {
             Utholdenhet uth = t.getResultat().getUtholdenhet();
