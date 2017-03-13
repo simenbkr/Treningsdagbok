@@ -7,8 +7,8 @@ public class DB {
 
     private static DB instance = new DB();
     private static final String URL = "jdbc:mysql://localhost/TreningsDagbok?useSSL=false";
-    private static final String USER = "kakemann";
-    private static final String PASSWORD = "jeghaterbarnmedraraksent";
+    private static final String USER = "treningsdagbok";
+    private static final String PASSWORD = "password";
     private static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
 
     private DB() {
