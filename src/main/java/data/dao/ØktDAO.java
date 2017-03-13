@@ -2,7 +2,9 @@ package data.dao;
 
 
 import data.db.DB;
+import data.mapper.PulsMapper;
 import data.mapper.ØktMapper;
+import data.models.Puls;
 import data.models.Økt;
 
 import java.sql.Connection;
@@ -79,6 +81,20 @@ public class ØktDAO implements IDAO<Økt> {
             ResultSet rad = DB.getConnection().createStatement().executeQuery("SELECT * FROM Økt WHERE id=" + id);
             return new ØktMapper().mapRow(rad,1337);
         } catch(SQLException e){
+            return null;
+        }
+    }
+
+    public List<Puls> getPulses(int id) {
+        List<Puls> pulses = new ArrayList<>();
+        try {
+            ResultSet resultSet = DB.getConnection().createStatement().executeQuery("SELECT  * FROM Puls WHERE Økt_id=" + id);
+            resultSet.beforeFirst();
+            while (resultSet.next()) {
+                pulses.add(new PulsMapper().mapRow(resultSet,1));
+            }
+            return pulses;
+        } catch (SQLException sqle) {
             return null;
         }
     }

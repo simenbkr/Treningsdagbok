@@ -41,4 +41,9 @@ public class Ute {
     public void setTemperatur(float temperatur) {
         this.temperatur = temperatur;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%2.2f C | %10s | %10s", temperatur, værforhold, værtype);
+    }
 }

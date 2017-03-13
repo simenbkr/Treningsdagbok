@@ -30,4 +30,9 @@ public class Utholdenhet {
     public void setEnhet(String enhet) {
         this.enhet = enhet;
     }
+
+    @Override
+    public String toString() {
+        return String.format(" %4.2f %5s", lengde, enhet);
+    }
 }

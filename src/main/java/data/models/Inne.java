@@ -31,4 +31,9 @@ public class Inne {
     public void setTilskuere(int tilskuere) {
         this.tilskuere = tilskuere;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%3d tilskuere | %15s", tilskuere, luft);
+    }
 }

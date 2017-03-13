@@ -41,4 +41,9 @@ public class Styrke {
     public void setReps(int reps) {
         this.reps = reps;
     }
+
+    @Override
+    public String toString() {
+        return String.format(" %3.2f kg | ", belastning) + String.format("%3d rep | ", reps) + String.format("%2d sett", sett);
+    }
 }
