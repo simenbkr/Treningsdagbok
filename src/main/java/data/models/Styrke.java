@@ -44,6 +44,11 @@ public class Styrke implements Comparable<Styrke>{
         this.reps = reps;
     }
 
+    @Override
+    public String toString() {
+        return String.format(" %3.2f kg | ", belastning) + String.format("%3d rep | ", reps) + String.format("%2d sett", sett);
+    }
+
     public int compareTo(Styrke styrke){
         float res = this.getBelastning()*this.getReps()*this.getSett() - styrke.getReps()*styrke.getSett()*styrke.getBelastning();
         if(res < 0){
@@ -53,6 +58,5 @@ public class Styrke implements Comparable<Styrke>{
             return 1;
         }
         return 0;
-
     }
 }

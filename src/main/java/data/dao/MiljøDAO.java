@@ -27,6 +27,7 @@ public class MiljøDAO implements IDAO<Miljø> {
             }
             st.setInt(3, miljø.getId());
             st.executeUpdate();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -39,6 +40,7 @@ public class MiljøDAO implements IDAO<Miljø> {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, miljø.getId());
             st.executeUpdate();
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -47,7 +49,8 @@ public class MiljøDAO implements IDAO<Miljø> {
     public void create(Miljø miljø) {
         String SQL = "INSERT INTO Miljø (Inne_id, Ute_id) VALUES (?, ?);";
         try {
-            PreparedStatement ps = DB.getConnection().prepareStatement(SQL);
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SQL);
             try {
                 ps.setInt(1, miljø.getInne().getId());
                 ps.setInt(2, 0);
@@ -56,6 +59,7 @@ public class MiljøDAO implements IDAO<Miljø> {
                 ps.setInt(2, miljø.getUte().getId());
             }
             ps.execute();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,7 +68,8 @@ public class MiljøDAO implements IDAO<Miljø> {
     public List<Miljø> listAll() {
         String SQL = "SELECT * FROM Miljø;";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             List<Miljø> miljøList = new ArrayList<Miljø>();
             MiljøMapper mapper = new MiljøMapper();
@@ -80,9 +85,12 @@ public class MiljøDAO implements IDAO<Miljø> {
     public Miljø getByID(int id) {
         String SQL = "SELECT * FROM Miljø WHERE ID=" + String.valueOf(id) + ";";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst(); resultSet.next();
-            return new MiljøMapper().mapRow(resultSet, 0);
+            Miljø miljø = new MiljøMapper().mapRow(resultSet, 0);
+            connection.close();
+            return miljø;
         } catch (SQLException e) {
             return null;
         }

@@ -32,6 +32,10 @@ public class Utholdenhet implements Comparable<Utholdenhet>{
     }
 
     @Override
+    public String toString() {
+        return String.format(" %4.2f %5s", lengde, enhet);
+    }
+
     public int compareTo(Utholdenhet utholdenhet) {
         if(this.lengde > utholdenhet.lengde){
             return 1;

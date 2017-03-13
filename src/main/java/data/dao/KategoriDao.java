@@ -26,6 +26,7 @@ public class KategoriDao implements IDAO<Kategori> {
             st.setInt(2, kategori.getForeldreId());
             st.setInt(3, kategori.getId());
             st.executeUpdate();
+            kobling.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,6 +39,7 @@ public class KategoriDao implements IDAO<Kategori> {
             PreparedStatement st = kobling.prepareStatement(sql);
             st.setInt(1, kategori.getId());
             st.executeUpdate();
+            kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -51,6 +53,7 @@ public class KategoriDao implements IDAO<Kategori> {
             st.setString(1, kategori.getNavn());
             st.setInt(2, kategori.getForeldreId());
             st.execute();
+            kobling.close();
         } catch(MySQLIntegrityConstraintViolationException e){
             try {
                 String sqlV2 = "INSERT INTO Kategori (navn) VALUES(?)";
@@ -58,6 +61,7 @@ public class KategoriDao implements IDAO<Kategori> {
                 PreparedStatement st = kobling.prepareStatement(sqlV2);
                 st.setString(1, kategori.getNavn());
                 st.execute();
+                kobling.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -70,11 +74,13 @@ public class KategoriDao implements IDAO<Kategori> {
     public List<Kategori> listAll() {
         List<Kategori> kategoriene = new ArrayList<Kategori>();
         try {
-            ResultSet radene = DB.getConnection().createStatement().executeQuery("SELECT * FROM Kategori");
+            Connection connection = DB.getConnection();
+            ResultSet radene = connection.createStatement().executeQuery("SELECT * FROM Kategori");
             radene.beforeFirst();
             while(radene.next()) {
                 kategoriene.add(new KategoriMapper().mapRow(radene,radene.getRow()));
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,9 +89,13 @@ public class KategoriDao implements IDAO<Kategori> {
 
     public Kategori getByID(int id) {
         try {
-            ResultSet rad = DB.getConnection().createStatement().executeQuery("SELECT * FROM Kategori WHERE id=" + id + ";");
+            Connection connection = DB.getConnection();
+            ResultSet rad = connection.createStatement().executeQuery("SELECT * FROM Kategori WHERE id=" + id + ";");
             rad.beforeFirst(); rad.next();
-            return new KategoriMapper().mapRow(rad,1);
+
+            Kategori kategori = new KategoriMapper().mapRow(rad,1);
+            connection.close();
+            return kategori;
         } catch (SQLException e) {
             return null;
         }
@@ -100,12 +110,14 @@ public class KategoriDao implements IDAO<Kategori> {
         String SQL = "SELECT * FROM Kategori WHERE foreldre_id=" + String.valueOf(kategori.getId()) + ";";
         List<Kategori> categories = new ArrayList<Kategori>();
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             KategoriMapper mapper = new KategoriMapper();
             while (resultSet.next()) {
                 categories.add(mapper.mapRow(resultSet, resultSet.getRow()));
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -116,12 +128,14 @@ public class KategoriDao implements IDAO<Kategori> {
         List<Øvelse> øvelses = new ArrayList<Øvelse>();
         String SQL = "SELECT Øvelses_id FROM Øvelse_tilhører_Kategori WHERE Kategori_id=" + String.valueOf(kategori.getId()) + ";";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             ØvelseDAO øvelseDAO = new ØvelseDAO();
             while (resultSet.next()) {
                 øvelses.add(øvelseDAO.getByID(resultSet.getInt("Øvelses_id")));
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

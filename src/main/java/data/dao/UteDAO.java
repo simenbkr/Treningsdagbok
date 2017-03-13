@@ -23,6 +23,7 @@ public class UteDAO implements IDAO<Ute> {
             st.setFloat(2, ute.getTemperatur());
             st.setInt(3, ute.getId());
             st.executeUpdate();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,6 +36,7 @@ public class UteDAO implements IDAO<Ute> {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, ute.getId());
             st.executeUpdate();
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -43,11 +45,13 @@ public class UteDAO implements IDAO<Ute> {
     public void create(Ute ute) {
         String SQL = "INSERT INTO Ute (værforhold, værtype, temperatur) VALUES (?, ?, ?);";
         try {
-            PreparedStatement ps = DB.getConnection().prepareStatement(SQL);
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SQL);
             ps.setString(1, ute.getVærforhold());
             ps.setString(2, ute.getVærtype());
             ps.setFloat(2, ute.getTemperatur());
             ps.execute();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,13 +60,15 @@ public class UteDAO implements IDAO<Ute> {
     public List<Ute> listAll() {
         String SQL = "SELECT * FROM Ute;";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             List<Ute> uteList = new ArrayList<Ute>();
             UteMapper mapper = new UteMapper();
             while (resultSet.next()) {
                 uteList.add(mapper.mapRow(resultSet, resultSet.getRow()));
             }
+            connection.close();
             return uteList;
         } catch (SQLException e) {
             return null;
@@ -72,9 +78,12 @@ public class UteDAO implements IDAO<Ute> {
     public Ute getByID(int id) {
         String SQL = "SELECT * FROM Ute WHERE ID=" + String.valueOf(id) + ";";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst(); resultSet.next();
-            return new UteMapper().mapRow(resultSet, 0);
+            Ute ute = new UteMapper().mapRow(resultSet, 0);
+            connection.close();
+            return ute;
         } catch (SQLException e) {
             return null;
         }
