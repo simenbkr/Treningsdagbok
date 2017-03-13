@@ -30,6 +30,11 @@ public class ØktInfoHandler implements IHandler {
                 .collect(Collectors.toList());
         økter.sort(Comparator.comparing(Økt::getTidspunkt));
 
+        if (økter.size() == 0) {
+            System.out.println("Ingen økter den siste måneden");
+            return;
+        }
+
         System.out.println(" Nr. | Tidspunkt");
         System.out.println("------------------------");
         IntStream.range(0, økter.size())
@@ -39,7 +44,14 @@ public class ØktInfoHandler implements IHandler {
         int number = -1;
         while (number == -1) {
             System.out.println("Skriv inn nummeret på økten du ønsker å se mer info om");
-            number = scanner.nextInt();
+            String input = scanner.nextLine();
+            try {
+                number = Integer.valueOf(input);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Ikke et gylid nummer!");
+                continue;
+            }
+
             if (number <= 0 || number > økter.size()) {
                 System.out.println("Ikke et gyldig nummer!");
                 number = -1;
@@ -58,23 +70,34 @@ public class ØktInfoHandler implements IHandler {
 
         System.out.println();
 
-        System.out.println("Øvelser:");
-        øktTuppels.stream()
-                .map(øktTuppel -> String.format(" %17s | ", øktTuppel.getØvelse().getNavn()) + String.format(" %8s | ", øktTuppel.getØvelse().getType()) +
-                        String.format("%35s | ", øktTuppel.getResultat().getStyrke() != null ? øktTuppel.getResultat().getStyrke().toString() : øktTuppel.getResultat().getUtholdenhet().toString()) +
-                        String.format("%35s | ", øktTuppel.getMiljø().getInne() != null ? øktTuppel.getMiljø().getInne().toString() : øktTuppel.getMiljø().getUte().toString())
-                )
-                .forEach(System.out::println);
+        if (øktTuppels.size() == 0) {
+            System.out.println("Ingen øvelser registrert for denne økten");
+        } else {
+
+            System.out.println("Øvelser:");
+            øktTuppels.stream()
+                    .map(øktTuppel -> String.format(" %17s | ", øktTuppel.getØvelse().getNavn()) + String.format(" %8s | ", øktTuppel.getØvelse().getType()) +
+                            String.format("%35s | ", øktTuppel.getResultat().getStyrke() != null ? øktTuppel.getResultat().getStyrke().toString() : øktTuppel.getResultat().getUtholdenhet().toString()) +
+                            String.format("%35s | ", øktTuppel.getMiljø().getInne() != null ? øktTuppel.getMiljø().getInne().toString() : øktTuppel.getMiljø().getUte().toString())
+                    )
+                    .forEach(System.out::println);
+        }
+
+        System.out.println();
 
         List<Puls> pulss = new ØktDAO().getPulses(økt.getId());
+        if (pulss.size() == 0) {
+            System.out.println("Ingen puls data registrert for øvelsen");
+        } else {
+            System.out.println("Puls:");
+            System.out.println("Puls |  Bredde |  Lengde | Høyde");
+            System.out.println("-------------------------------------");
+            pulss.stream()
+                    .map(puls -> puls.getTid().toString().substring(0, 16) + String.format(" %3d |  %3.2f |  %3.2f |  %4.2f ", puls.getPuls(), puls.getBredde(), puls.getLengde(), puls.getHøyde()))
+                    .forEach(System.out::println);
+        }
+        
         System.out.println();
-        System.out.println("Puls:");
-        System.out.println("Puls |  Bredde |  Lengde | Høyde");
-        System.out.println("-------------------------------------");
-        pulss.stream()
-                .map(puls -> puls.getTid().toString().substring(0, 16) + String.format(" %3d |  %3.2f |  %3.2f |  %4.2f ", puls.getPuls(), puls.getBredde(), puls.getLengde(), puls.getHøyde()))
-                .forEach(System.out::println);
-
     }
 
     @Override

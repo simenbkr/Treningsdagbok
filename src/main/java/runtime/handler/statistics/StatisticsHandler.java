@@ -27,7 +27,10 @@ public class StatisticsHandler implements IHandler {
             System.out.print("> ");
             String input = scanner.nextLine();
             for (IHandler handler : handlers) {
-                if (handler.validCommand(input)) handler.handle(scanner);
+                if (handler.validCommand(input)) {
+                    handler.handle(scanner);
+                    return;
+                }
             }
             System.out.println();
         }
