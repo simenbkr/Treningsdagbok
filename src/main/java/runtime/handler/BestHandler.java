@@ -26,7 +26,7 @@ public class BestHandler implements IHandler {
                 this.utholdenhetHandler(scanner);
             }
             else {
-                System.out.println("Ikke en gyldig kommando! Gyldige kommandoer er: 1, styrke, 2, utholdenhet");
+                System.out.println("Ikke en gyldig kommando! Gyldige kommandoer er: 1, styrke, 2, utholdenhet samt avslutt for å gå tibake til hovedmenyen.");
             }
         }
     }
