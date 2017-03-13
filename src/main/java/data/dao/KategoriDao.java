@@ -84,6 +84,7 @@ public class KategoriDao implements IDAO<Kategori> {
     public Kategori getByID(int id) {
         try {
             ResultSet rad = DB.getConnection().createStatement().executeQuery("SELECT * FROM Kategori WHERE id=" + id + ";");
+            rad.beforeFirst(); rad.next();
             return new KategoriMapper().mapRow(rad,1);
         } catch (SQLException e) {
             return null;

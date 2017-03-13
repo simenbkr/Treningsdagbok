@@ -73,6 +73,7 @@ public class UteDAO implements IDAO<Ute> {
         String SQL = "SELECT * FROM Ute WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new UteMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;
