@@ -16,6 +16,7 @@ public class RegistrationHandler implements IHandler {
         String kondisjon = scanner.nextLine();
         Økt økt = new Økt(new Timestamp(System.currentTimeMillis()), kondisjon);
         økt.setNotat(""); //init for å kunne appende
+        new ØktDAO().create(økt);
 
         while (true) {
             System.out.println("\nKommandoer:");
@@ -42,7 +43,7 @@ public class RegistrationHandler implements IHandler {
         System.out.println("\nHvordan presterte du denne treningsøkten?");
         System.out.print("> ");
         økt.setPrestasjon(scanner.nextLine());
-        new ØktDAO().create(økt);
+        new ØktDAO().update(økt);
     }
 
     public boolean validCommand(String command) {
