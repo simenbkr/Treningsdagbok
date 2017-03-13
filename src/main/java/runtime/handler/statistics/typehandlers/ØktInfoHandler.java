@@ -90,13 +90,13 @@ public class ØktInfoHandler implements IHandler {
             System.out.println("Ingen puls data registrert for øvelsen");
         } else {
             System.out.println("Puls:");
-            System.out.println("Puls |  Bredde |  Lengde | Høyde");
-            System.out.println("-------------------------------------");
+            System.out.println("Tidspunkt        | Puls |  Bredde |  Lengde | Høyde");
+            System.out.println("-----------------------------------------------------");
             pulss.stream()
-                    .map(puls -> puls.getTid().toString().substring(0, 16) + String.format(" %3d |  %3.2f |  %3.2f |  %4.2f ", puls.getPuls(), puls.getBredde(), puls.getLengde(), puls.getHøyde()))
+                    .map(puls -> puls.getTid().toString().substring(0, 16) + String.format(" |  %3d |  %03.2f |  %03.2f |  %04.2f ", puls.getPuls(), puls.getBredde(), puls.getLengde(), puls.getHøyde()))
                     .forEach(System.out::println);
         }
-        
+
         System.out.println();
     }
 

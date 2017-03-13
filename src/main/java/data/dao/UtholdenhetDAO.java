@@ -22,6 +22,7 @@ public class UtholdenhetDAO implements IDAO<Utholdenhet> {
             st.setString(2, utholdenhet.getEnhet());
             st.setInt(3, utholdenhet.getId());
             st.executeUpdate();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,6 +35,7 @@ public class UtholdenhetDAO implements IDAO<Utholdenhet> {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, utholdenhet.getId());
             st.executeUpdate();
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -42,10 +44,12 @@ public class UtholdenhetDAO implements IDAO<Utholdenhet> {
     public void create(Utholdenhet utholdenhet) {
         String SQL = "INSERT INTO Utholdenhet (lengde, enhet) VALUES (?, ?);";
         try {
-            PreparedStatement ps = DB.getConnection().prepareStatement(SQL);
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SQL);
             ps.setFloat(1, utholdenhet.getLengde());
             ps.setString(2, utholdenhet.getEnhet());
             ps.execute();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,13 +58,15 @@ public class UtholdenhetDAO implements IDAO<Utholdenhet> {
     public List<Utholdenhet> listAll() {
         String SQL = "SELECT * FROM Utholdenhet;";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             List<Utholdenhet> utholdenhetList = new ArrayList<Utholdenhet>();
             UtholdenhetMapper mapper = new UtholdenhetMapper();
             while (resultSet.next()) {
                 utholdenhetList.add(mapper.mapRow(resultSet, resultSet.getRow()));
             }
+            connection.close();
             return utholdenhetList;
         } catch (SQLException e) {
             return null;
@@ -70,9 +76,12 @@ public class UtholdenhetDAO implements IDAO<Utholdenhet> {
     public Utholdenhet getByID(int id) {
         String SQL = "SELECT * FROM Utholdenhet WHERE ID=" + String.valueOf(id) + ";";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst(); resultSet.next();
-            return new UtholdenhetMapper().mapRow(resultSet, 0);
+            Utholdenhet utholdenhet = new UtholdenhetMapper().mapRow(resultSet, 0);
+            connection.close();
+            return utholdenhet;
         } catch (SQLException e) {
             return null;
         }

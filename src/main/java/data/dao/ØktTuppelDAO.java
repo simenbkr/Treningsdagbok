@@ -26,6 +26,7 @@ public class ØktTuppelDAO implements IDAO<ØktTuppel>{
             st.setInt(1, øktTuppel.getØkt().getId());
             st.setInt(2, øktTuppel.getØvelse().getId());
             st.executeUpdate();
+            kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -42,6 +43,7 @@ public class ØktTuppelDAO implements IDAO<ØktTuppel>{
             st.setInt(3, øktTuppel.getMiljø().getId());
             st.setInt(4, øktTuppel.getResultat().getId());
             st.execute();
+            kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -49,13 +51,15 @@ public class ØktTuppelDAO implements IDAO<ØktTuppel>{
 
     public List<ØktTuppel> listAll() {
         List<ØktTuppel> økta = new ArrayList<ØktTuppel>();
-        String sql = "SELECT * FROM Økt_har_Øvelse";
+        String SQL = "SELECT * FROM Økt_har_Øvelse";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(sql);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             while(resultSet.next()){
                 økta.add(new ØktTuppelMapper().mapRow(resultSet, resultSet.getRow()));
             }
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -68,13 +72,15 @@ public class ØktTuppelDAO implements IDAO<ØktTuppel>{
 
     public List<ØktTuppel> getByØktId(int id){
         List<ØktTuppel> økta = new ArrayList<ØktTuppel>();
-        String sql = "SELECT * FROM Økt_har_Øvelse WHERE Økt_id=" + id;
+        String SQL = "SELECT * FROM Økt_har_Øvelse WHERE Økt_id=" + id;
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(sql);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             while(resultSet.next()){
                 økta.add(new ØktTuppelMapper().mapRow(resultSet, resultSet.getRow()));
             }
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -83,13 +89,15 @@ public class ØktTuppelDAO implements IDAO<ØktTuppel>{
 
     public List<ØktTuppel> getByØvelseId(int id){
         List<ØktTuppel> økta = new ArrayList<ØktTuppel>();
-        String sql = "SELECT * FROM Økt_har_Øvelse WHERE Øvelse_id=" + id;
+        String SQL = "SELECT * FROM Økt_har_Øvelse WHERE Øvelse_id=" + id;
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(sql);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             while(resultSet.next()){
                 økta.add(new ØktTuppelMapper().mapRow(resultSet, resultSet.getRow()));
             }
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }

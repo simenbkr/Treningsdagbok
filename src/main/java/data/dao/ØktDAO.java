@@ -28,6 +28,7 @@ public class ØktDAO implements IDAO<Økt> {
             st.setString(5, økt.getNotat());
             st.setInt(6, økt.getId());
             st.executeUpdate();
+            kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -40,6 +41,7 @@ public class ØktDAO implements IDAO<Økt> {
             PreparedStatement st = kobling.prepareStatement(sql);
             st.setInt(1,økt.getId());
             st.executeUpdate();
+            kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -57,6 +59,7 @@ public class ØktDAO implements IDAO<Økt> {
             st.setString(4, økt.getPrestasjon());
             st.setString(5, økt.getNotat());
             st.execute();
+            kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -65,11 +68,13 @@ public class ØktDAO implements IDAO<Økt> {
     public List<Økt> listAll() {
         List<Økt> øktene = new ArrayList<Økt>();
         try {
-            ResultSet radene = DB.getConnection().createStatement().executeQuery("SELECT * FROM Økt");
+            Connection connection = DB.getConnection();
+            ResultSet radene = connection.createStatement().executeQuery("SELECT * FROM Økt");
             radene.beforeFirst();
             while(radene.next()){
                 øktene.add(new ØktMapper().mapRow(radene, radene.getRow()));
             }
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -78,10 +83,13 @@ public class ØktDAO implements IDAO<Økt> {
 
     public Økt getByID(int id) {
         try {
-            String sql = "SELECT * FROM Økt WHERE id=" + id;
-            ResultSet rad = DB.getConnection().createStatement().executeQuery(sql);
+            String SQL = "SELECT * FROM Økt WHERE id=" + id;
+            Connection connection = DB.getConnection();
+            ResultSet rad = connection.createStatement().executeQuery(SQL);
             rad.beforeFirst(); rad.next();
-            return (new ØktMapper().mapRow(rad,rad.getRow()));
+            Økt økt = new ØktMapper().mapRow(rad,rad.getRow());
+            connection.close();
+            return økt;
         } catch(SQLException e){
             e.printStackTrace();
             return null;
@@ -91,11 +99,13 @@ public class ØktDAO implements IDAO<Økt> {
     public List<Puls> getPulses(int id) {
         List<Puls> pulses = new ArrayList<>();
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery("SELECT  * FROM Puls WHERE Økt_id=" + id);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT  * FROM Puls WHERE Økt_id=" + id);
             resultSet.beforeFirst();
             while (resultSet.next()) {
                 pulses.add(new PulsMapper().mapRow(resultSet,1));
             }
+            connection.close();
             return pulses;
         } catch (SQLException sqle) {
             return null;

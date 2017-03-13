@@ -23,6 +23,7 @@ public class StyrkeDAO implements IDAO<Styrke> {
             st.setInt(3, styrke.getReps());
             st.setInt(4, styrke.getId());
             st.executeUpdate();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,6 +36,7 @@ public class StyrkeDAO implements IDAO<Styrke> {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, styrke.getId());
             st.executeUpdate();
+            connection.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -43,11 +45,13 @@ public class StyrkeDAO implements IDAO<Styrke> {
     public void create(Styrke styrke) {
         String SQL = "INSERT INTO Styrke (belastning, reps, sett) VALUES (?, ?, ?);";
         try {
-            PreparedStatement ps = DB.getConnection().prepareStatement(SQL);
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SQL);
             ps.setFloat(1, styrke.getBelastning());
             ps.setInt(2, styrke.getReps());
             ps.setDouble(3, styrke.getSett());
             ps.execute();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,13 +60,15 @@ public class StyrkeDAO implements IDAO<Styrke> {
     public List<Styrke> listAll() {
         String SQL = "SELECT * FROM Styrke;";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
             List<Styrke> styrkeList = new ArrayList<Styrke>();
             StyrkeMapper mapper = new StyrkeMapper();
             while (resultSet.next()) {
                 styrkeList.add(mapper.mapRow(resultSet, resultSet.getRow()));
             }
+            connection.close();
             return styrkeList;
         } catch (SQLException e) {
             return null;
@@ -72,9 +78,12 @@ public class StyrkeDAO implements IDAO<Styrke> {
     public Styrke getByID(int id) {
         String SQL = "SELECT * FROM Styrke WHERE ID=" + String.valueOf(id) + ";";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst(); resultSet.next();
-            return new StyrkeMapper().mapRow(resultSet, 0);
+            Styrke styrke = new StyrkeMapper().mapRow(resultSet, 0);
+            connection.close();
+            return styrke;
         } catch (SQLException e) {
             return null;
         }
