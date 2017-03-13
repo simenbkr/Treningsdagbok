@@ -1,5 +1,6 @@
 package runtime.handler.registration;
 
+import data.dao.ØktDAO;
 import data.models.Økt;
 import runtime.handler.IHandler;
 
@@ -9,7 +10,6 @@ import java.util.Scanner;
 public class RegistrationHandler implements IHandler {
 
     public void handle(Scanner scanner) {
-        boolean run = true;
         System.out.println("\nDet må registreres litt informasjon om økten.");
         System.out.println("Hvilken kondisjon er du i?");
         System.out.print("> ");
@@ -17,7 +17,7 @@ public class RegistrationHandler implements IHandler {
         Økt økt = new Økt(new Timestamp(System.currentTimeMillis()), kondisjon);
         økt.setNotat(""); //init for å kunne appende
 
-        while (run) {
+        while (true) {
             System.out.println("\nKommandoer:");
             System.out.println("------------");
             System.out.println("øvelse - Registrer en ny øvelse");
@@ -34,17 +34,15 @@ public class RegistrationHandler implements IHandler {
             } else if(input.matches("puls")) {
                 PulsSubHandler.handle(scanner, økt);
             } else if (input.matches("ferdig")) {
-                run = false;
-            } else {
-                System.out.println("hva kan vi gjøre her?");
+                break;
             }
         }
         Timestamp now = new Timestamp(System.currentTimeMillis());
         økt.setVarighet((int)((now.getTime() - økt.getTidspunkt().getTime())/60000));
         System.out.println("\nHvordan presterte du denne treningsøkten?");
         System.out.print("> ");
-        String prestasjon = scanner.nextLine();
-
+        økt.setPrestasjon(scanner.nextLine());
+        new ØktDAO().create(økt);
     }
 
     public boolean validCommand(String command) {

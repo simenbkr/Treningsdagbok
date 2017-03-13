@@ -1,6 +1,6 @@
 package runtime.handler.registration;
 
-import data.dao.ØvelseDAO;
+import data.dao.*;
 import data.models.*;
 
 import java.util.Scanner;
@@ -14,62 +14,60 @@ public class ØvelseSubHandler {
         Øvelse øvelse = new ØvelseDAO().getByName(name);
         if (øvelse == null) {
             System.out.println("\nØvelsen ligger ikke i vår database, det vil opprettes en ny øvelse.");
-            System.out.println("Beskriv øvelsen:\nHvordan utføres den?\nHvilke muskelgrupper trener den?\nHvor mange deltagere er det?");
+            System.out.println("Beskriv øvelsen, (forslag):\n\t-Hvordan utføres den?\n\t-Hvilke muskelgrupper trener den?\n\t-Hvor mange deltagere er det?");
             System.out.print("> ");
             String description = scanner.nextLine();
 
             //TODO kategori?
 
             String type;
-            boolean typeChecked = false;
-            while (!typeChecked) {
+            while (true) {
                 System.out.println("Er det en Styrke eller Utholdenhets øvelse?");
                 System.out.print("> ");
                 type = scanner.nextLine();
 
-                if (type.equals("Styrke") || type.equals("Utholdenhet")) {
+                if (type.toLowerCase().equals("styrke") || type.toLowerCase().equals("utholdenhet")) {
                     øvelse = new Øvelse(name, description, type);
+                    new ØvelseDAO().create(øvelse);
+                    break;
                 } else {
-                    System.out.println("Venligst oppgi \"Styrke\" eller \"Utholdenhet\" som øvelsestype.");
+                    System.out.println("Venligst oppgi \"styrke\" eller \"utholdenhet\" som øvelsestype.");
                 }
             }
         }
 
         Miljø miljø = null;
 
-        System.out.println("\nMiljøet for øvelsen må registreres.");
+        System.out.println("\nHvordan var miljøet da du utførte øvelsen?");
         String miljøType;
-        boolean miljøChecked = false;
-        while (!miljøChecked) {
+        while (true) {
             System.out.println("Foregår øvelsen ute eller inne?");
             System.out.print("> ");
             miljøType = scanner.nextLine();
 
-            if (miljøType.equals("inne")) {
-                miljøChecked = true;
-
+            if (miljøType.toLowerCase().equals("inne")) {
                 System.out.println("Hvordan er luftkvaliteten?");
                 System.out.print("> ");
                 String luft = scanner.nextLine();
 
-                boolean tilskuerChecked = false;
                 int tilskuere = 0;
-                while (!tilskuerChecked) try {
+                while (true) try {
                     System.out.println("Hvor mange tilskuere er det?");
                     System.out.print("> ");
                     tilskuere = Integer.valueOf(scanner.nextLine());
 
                     if (tilskuere > 0) System.out.println("det kan ikke være et negativt antall tilskuere");
-                    else tilskuerChecked = true;
+                    else break;
 
                 } catch (NumberFormatException e) {
-                    System.out.println("Venligst oppgi et tall.");
+                    System.out.println("Venligst oppgi et heltall.");
                 }
-
-                miljø = new Miljø(new Inne(luft, tilskuere));
-
-            } else if (miljøType.equals("ute")) {
-                miljøChecked = true;
+                Inne inne = new Inne(luft, tilskuere);
+                new InneDAO().create(inne);
+                miljø = new Miljø(inne);
+                new MiljøDAO().create(miljø);
+                break;
+            } else if (miljøType.toLowerCase().equals("ute")) {
 
                 System.out.println("Hvilken værtype er det?");
                 System.out.print("> ");
@@ -79,21 +77,20 @@ public class ØvelseSubHandler {
                 System.out.print("> ");
                 String værforhold = scanner.nextLine();
 
-                boolean tempChecked = false;
                 float temperatur = 0;
-                while (!tempChecked) try {
+                while (true) try {
                     System.out.println("Hva er temperaturen?");
                     System.out.print("> ");
                     temperatur = Float.valueOf(scanner.nextLine());
-
-                    tempChecked = true;
-
+                    break;
                 } catch (NumberFormatException e) {
-                    System.out.println("Venligst oppgi et tall.");
+                    System.out.println("Venligst oppgi et tall (skill decimal med punktum).");
                 }
-
-                miljø = new Miljø(new Ute(værforhold, værtype, temperatur));
-
+                Ute ute = new Ute(værforhold, værtype, temperatur);
+                new UteDAO().create(ute);
+                miljø = new Miljø(ute);
+                new MiljøDAO().create(miljø);
+                break;
             } else {
                 System.out.println("Venligst oppgi \"inne\" eller \"ute\"");
             }
@@ -101,75 +98,75 @@ public class ØvelseSubHandler {
 
         Resultat resultat = null;
         System.out.println("\nDet må registreres en resultat for øvelsen.");
-        if (øvelse.getType().equals("Styrke")) {
+        if (øvelse.getType().toLowerCase().equals("styrke")) {
 
             float belastning = 0;
-            boolean belastningChecked = false;
-            while (!belastningChecked) try {
+            while (true) try {
                 System.out.println("Hva var belastningen?");
                 System.out.print("> ");
                 belastning = Float.valueOf(scanner.nextLine());
 
                 if (belastning < 0) System.out.println("Belastning må være positiv.");
-                else belastningChecked = true;
+                else break;
 
             } catch (NumberFormatException e) {
-                System.out.println("Venligst oppgi et tall.");
+                System.out.println("Venligst oppgi et tall (skill decimal med punktum).");
             }
 
             int sett = 0;
-            boolean settChecked = false;
-            while (!settChecked) try {
+            while (true) try {
                 System.out.println("Hvor store var settene?");
                 System.out.print("> ");
                 sett = Integer.valueOf(scanner.nextLine());
 
                 if (sett < 0) System.out.println("Sett på være positiv.");
-                else settChecked = true;
+                else break;
 
             } catch (NumberFormatException e) {
                 System.out.println("Venligst oppgi et heltall.");
             }
 
             int reps = 0;
-            boolean repsChecked = false;
-            while (!repsChecked) try {
+            while (true) try {
                 System.out.println("Hvor mange repitisjoner var det?");
                 System.out.print("> ");
                 reps = Integer.valueOf(scanner.nextLine());
 
                 if (reps < 0) System.out.println("Det må være et positivt antall repitisjoner");
-                else repsChecked = true;
+                else break;
 
             } catch (NumberFormatException e) {
                 System.out.println("Venligst oppgi et heltall.");
             }
+            Styrke styrke = new Styrke(belastning, reps, sett);
+            new StyrkeDAO().create(styrke);
+            resultat = new Resultat(styrke);
+            new ResultatDAO().create(resultat);
 
-            resultat = new Resultat(new Styrke(belastning, reps, sett));
 
-
-        } else if (øvelse.getType().equals("Utholdenhet")) {
+        } else if (øvelse.getType().toLowerCase().equals("utholdenhet")) {
             System.out.println("Hvilken enhet vil du måle resultatet i?");
             System.out.print("> ");
             String enhet = scanner.nextLine();
 
             float lengde = 0;
-            boolean lengdeChecked = false;
-            while (!lengdeChecked) try {
+            while (true) try {
                 System.out.println("Hva er resultatet?");
                 System.out.print("> ");
                 lengde = Float.valueOf(scanner.nextLine());
-
-                lengdeChecked = true;
+                break;
 
             } catch (NumberFormatException e) {
-                System.out.println("Venligst oppgi et tall.");
+                System.out.println("Venligst oppgi et tall (skill decimal med punktum).");
             }
-
-            resultat = new Resultat(new Utholdenhet(lengde, enhet));
+            Utholdenhet utholdenhet = new Utholdenhet(lengde, enhet);
+            new UtholdenhetDAO().create(utholdenhet);
+            resultat = new Resultat(utholdenhet);
+            new ResultatDAO().create(resultat);
         }
 
         ØktTuppel øktTuppel = new ØktTuppel(økt, øvelse, miljø, resultat);
+        new ØktTuppelDAO().create(øktTuppel);
     }
 
     public boolean validCommand(String command) {

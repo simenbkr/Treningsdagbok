@@ -18,10 +18,10 @@ public class StatisticsHandler implements IHandler {
 
     public void handle(Scanner scanner) {
         while (true) {
+            System.out.println("--------------------------------");
             System.out.println("Viser statistikk for siste måned");
-            System.out.println("");
             System.out.println("Kommandoer:");
-            System.out.println("------------");
+            System.out.println("-----------");
             System.out.println("økter - Viser oversikt over økter");
             System.out.println("økt - Viser informasjon om en økt");
             System.out.print("> ");

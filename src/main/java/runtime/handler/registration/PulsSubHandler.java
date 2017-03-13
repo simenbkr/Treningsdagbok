@@ -1,5 +1,6 @@
 package runtime.handler.registration;
 
+import data.dao.PulsDAO;
 import data.models.Puls;
 import data.models.Økt;
 
@@ -7,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.Scanner;
 
 public class PulsSubHandler {
-    public static Puls handle(Scanner scanner, Økt økt) {
+    public static void handle(Scanner scanner, Økt økt) {
         int pulsMeasurement = 0;
         double latitude = 0, longitude = 0, height = 0;
 
@@ -64,6 +65,7 @@ public class PulsSubHandler {
         }
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        return new Puls(timestamp, pulsMeasurement, longitude, height, latitude, økt.getId());
+        Puls puls = new Puls(timestamp, pulsMeasurement, longitude, height, latitude, økt.getId());
+        new PulsDAO().create(puls);
     }
 }
