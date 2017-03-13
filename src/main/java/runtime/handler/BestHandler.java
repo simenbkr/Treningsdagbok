@@ -25,6 +25,9 @@ public class BestHandler implements IHandler {
             else if(input.toLowerCase().matches("^utholdenhet") || input.matches("^2")){
                 this.utholdenhetHandler(scanner);
             }
+            else {
+                System.out.println("Ikke en gyldig kommando! Gyldige kommandoer er: 1, styrke, 2, utholdenhet");
+            }
         }
     }
 
@@ -42,12 +45,16 @@ public class BestHandler implements IHandler {
                 .collect(Collectors.toCollection(ArrayList::new));
 
         Collections.sort(styrkeØktTupplene, (s1,s2) -> s2.getResultat().getStyrke().compareTo(s1.getResultat().getStyrke()));
+        List<ØktTuppel> styrkePrint = styrkeØktTupplene.subList(0,4);
+        String output = "Her er dine beste resultater for perioden:\n";
+        int i = 0;
+        for (ØktTuppel t : styrkePrint) {
 
-        String output = "";
-        for (ØktTuppel t : styrkeØktTupplene) {
             Styrke styrken = t.getResultat().getStyrke();
-            output += styrken.getBelastning() * styrken.getSett() * styrken.getReps();
-            output += "\n";
+            output += t.getØkt().getTidspunkt() + ":\n";
+            output += "Belastning: " + styrken.getBelastning() + "\nAntall sett: " + styrken.getSett() + "\nAntall reps: "  + styrken.getReps();
+            output += "\n\n";
+            i++;
         }
         output += "Du har i denne perioden trent styrke " + styrkeØktTupplene.size() + " ganger.";
         System.out.println(output);
@@ -63,7 +70,7 @@ public class BestHandler implements IHandler {
                     øktTupplene.add(tuppel);
                 }
             } catch(NullPointerException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return øktTupplene;
@@ -79,7 +86,7 @@ public class BestHandler implements IHandler {
                     øktTupplene.add(tuppel);
                 }
             } catch(NullPointerException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return øktTupplene;
@@ -96,13 +103,14 @@ public class BestHandler implements IHandler {
                 .filter(s1 -> s1.getØkt().getTidspunkt().compareTo(startDato) >= 0
                         && s1.getØkt().getTidspunkt().compareTo(sluttDato) <= 0)
                 .collect(Collectors.toCollection(ArrayList::new));
-        Collections.sort(øktTupplene, (s1,s2) -> s1.getResultat().getUtholdenhet().compareTo(s2.getResultat().getUtholdenhet()));
-
-        String output = "";
-        for (ØktTuppel t : øktTupplene) {
+        Collections.sort(øktTupplene, (s1,s2) -> s2.getResultat().getUtholdenhet().compareTo(s1.getResultat().getUtholdenhet()));
+        List<ØktTuppel> øktPrint = øktTupplene.subList(0,4);
+        String output = "Her er dine beste resultater for perioden:\n";
+        for (ØktTuppel t : øktPrint) {
             Utholdenhet uth = t.getResultat().getUtholdenhet();
+            output += t.getØkt().getTidspunkt() + ": ";
             output += uth.getLengde() + " " + uth.getEnhet();
-            output += "\n";
+            output += "\n\n";
         }
         output += "Du har i denne perioden trent utholdenhet " + øktTupplene.size() + " ganger.";
         System.out.println(output);
@@ -116,12 +124,14 @@ public class BestHandler implements IHandler {
             System.out.println("Velg startdato (YYYY-MM-DD)");
             System.out.print("> ");
             String datoString = scanner.nextLine();
+
             DateFormat formatør = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 startDatoen = formatør.parse(datoString);
                 break;
             } catch (ParseException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println("Oida, det var visst ikke en gyldig dato! Prøv på nytt!\n");
             }
         }
         while (true) {
@@ -133,7 +143,8 @@ public class BestHandler implements IHandler {
                 sluttDatoen = formatør.parse(datoString);
                 break;
             } catch (ParseException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println("Oida, det var visst ikke en gyldig dato! Prøv på nytt!\n");
             }
         }
         dates.add(startDatoen); dates.add(sluttDatoen);

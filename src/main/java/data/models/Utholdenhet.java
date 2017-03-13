@@ -41,6 +41,26 @@ public class Utholdenhet implements Comparable<Utholdenhet>{
     }
 
     public int compareTo(Utholdenhet utholdenhet) {
+        if(this.enhet.equals("m") && utholdenhet.enhet.equals("km")){
+            return this.compareTo(new Utholdenhet(utholdenhet.getLengde()*1000, "m"));
+        } else if(utholdenhet.enhet.equals("m") && this.enhet.equals("km")){
+            return this.compareTo(new Utholdenhet(utholdenhet.getLengde()/1000, "km"));
+        }
+
+        if(this.enhet.equals("s") && utholdenhet.enhet.equals("t")){
+            return this.compareTo(new Utholdenhet(utholdenhet.getLengde()*60, "s"));
+        } else if(utholdenhet.enhet.equals("s") && this.enhet.equals("t")){
+            return this.compareTo(new Utholdenhet(utholdenhet.getLengde()/60, "t"));
+        }
+
+        if(this.enhet.equals("s") && utholdenhet.enhet.equals("m")){
+            return -1;
+        } else if(this.enhet.equals("t") && utholdenhet.enhet.equals("km")){
+            return -1;
+        } else if(this.enhet.equals("m") && utholdenhet.enhet.equals("t")){
+            return -1;
+        }
+
         if(this.lengde > utholdenhet.lengde){
             return 1;
         }
