@@ -81,6 +81,7 @@ public class MiljøDAO implements IDAO<Miljø> {
         String SQL = "SELECT * FROM Miljø WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new MiljøMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;

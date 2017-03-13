@@ -72,6 +72,7 @@ public class PulsDAO implements IDAO<Puls> {
         String SQL = "SELECT * FROM Puls WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new PulsMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;

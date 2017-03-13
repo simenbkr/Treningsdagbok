@@ -71,6 +71,7 @@ public class UtholdenhetDAO implements IDAO<Utholdenhet> {
         String SQL = "SELECT * FROM Utholdenhet WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new UtholdenhetMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;

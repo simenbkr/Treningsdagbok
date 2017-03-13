@@ -73,6 +73,7 @@ public class StyrkeDAO implements IDAO<Styrke> {
         String SQL = "SELECT * FROM Styrke WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new StyrkeMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;

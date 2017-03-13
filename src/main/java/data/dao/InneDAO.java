@@ -71,6 +71,7 @@ public class InneDAO implements IDAO<Inne> {
         String SQL = "SELECT * FROM Inne WHERE ID=" + String.valueOf(id) + ";";
         try {
             ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
+            resultSet.beforeFirst(); resultSet.next();
             return new InneMapper().mapRow(resultSet, 0);
         } catch (SQLException e) {
             return null;

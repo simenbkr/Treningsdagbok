@@ -78,9 +78,12 @@ public class ØktDAO implements IDAO<Økt> {
 
     public Økt getByID(int id) {
         try {
-            ResultSet rad = DB.getConnection().createStatement().executeQuery("SELECT * FROM Økt WHERE id=" + id);
-            return new ØktMapper().mapRow(rad,1337);
+            String sql = "SELECT * FROM Økt WHERE id=" + id;
+            ResultSet rad = DB.getConnection().createStatement().executeQuery(sql);
+            rad.beforeFirst(); rad.next();
+            return (new ØktMapper().mapRow(rad,rad.getRow()));
         } catch(SQLException e){
+            e.printStackTrace();
             return null;
         }
     }
