@@ -7,11 +7,15 @@ public class Ute {
     private String værtype;
     private float temperatur;
 
-    public Ute(int id, String værforhold, String værtype, float temperatur) {
-        this.id = id;
+    public Ute(String værforhold, String værtype, float temperatur) {
         this.værforhold = værforhold;
         this.værtype = værtype;
         this.temperatur = temperatur;
+    }
+
+    public Ute(int id, String værforhold, String værtype, float temperatur) {
+        this(værforhold, værtype, temperatur);
+        this.id = id;
     }
 
     public int getId() {

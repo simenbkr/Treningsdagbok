@@ -10,5 +10,6 @@ public class NoteSubHandler {
         System.out.print("> ");
         String input = scanner.nextLine();
         økt.setNotat(økt.getNotat().concat(input));
+        System.out.println("Lagt til i notat.");
     }
 }

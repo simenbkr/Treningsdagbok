@@ -10,8 +10,7 @@ public class Puls {
     private double lengde, bredde, høyde;
     private int øktId;
 
-    public Puls(int id, Timestamp tid, int puls, double lengde, double høyde, double bredde, int øktId) {
-        this.id = id;
+    public Puls(Timestamp tid, int puls, double lengde, double høyde, double bredde, int øktId) {
         this.tid = tid;
         this.puls = puls;
         this.lengde = lengde;
@@ -20,8 +19,9 @@ public class Puls {
         this.øktId = øktId;
     }
 
-    public Puls(){
-
+    public Puls(int id, Timestamp tid, int puls, double lengde, double høyde, double bredde, int øktId) {
+        this(tid, puls, lengde, høyde, bredde, øktId);
+        this.id = id;
     }
 
     public int getId() {

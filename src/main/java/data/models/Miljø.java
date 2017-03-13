@@ -6,14 +6,22 @@ public class Miljø {
     private Inne inne;
     private Ute ute;
 
-    public Miljø(int id, Inne inne) {
-        this.id = id;
+    public Miljø(Ute ute) {
+        this.ute = ute;
+    }
+
+    public Miljø(Inne inne) {
         this.inne = inne;
     }
 
     public Miljø(int id, Ute ute) {
+        this(ute);
         this.id = id;
-        this.ute = ute;
+    }
+
+    public Miljø(int id, Inne inne) {
+        this(inne);
+        this.id = id;
     }
 
     public int getId() {

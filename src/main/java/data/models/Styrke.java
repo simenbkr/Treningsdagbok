@@ -1,7 +1,5 @@
 package data.models;
 
-import java.util.Comparator;
-
 public class Styrke implements Comparable<Styrke>{
 
     private int id;
@@ -9,11 +7,15 @@ public class Styrke implements Comparable<Styrke>{
     private int sett;
     private int reps;
 
-    public Styrke(int id, float belastning, int reps, int sett) {
-        this.id = id;
+    public Styrke(float belastning, int reps, int sett) {
         this.belastning = belastning;
         this.reps = reps;
         this.sett = sett;
+    }
+
+    public Styrke(int id, float belastning, int reps, int sett) {
+        this(belastning, reps, sett);
+        this.id = id;
     }
 
     public int getId() {

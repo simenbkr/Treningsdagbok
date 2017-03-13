@@ -7,11 +7,15 @@ public class Øvelse {
     private String beskrivelse;
     private String type;
 
-    public Øvelse(int id, String navn, String beskrivelse, String type) {
-        this.id = id;
+    public Øvelse(String navn, String beskrivelse, String type) {
         this.navn = navn;
         this.beskrivelse = beskrivelse;
         this.type = type;
+    }
+
+    public Øvelse(int id, String navn, String beskrivelse, String type) {
+        this(navn, beskrivelse, type);
+        this.id = id;
     }
 
     public int getId() {

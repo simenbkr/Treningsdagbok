@@ -6,10 +6,15 @@ public class Inne {
     private String luft;
     private int tilskuere;
 
-    public Inne(int id, String luft, int tilskuere) {
+    public Inne(String luft, int tilskuere) {
         this.id = id;
         this.luft = luft;
         this.tilskuere = tilskuere;
+    }
+
+    public Inne(int id, String luft, int tilskuere) {
+        this(luft, tilskuere);
+        this.id = id;
     }
 
     public int getId() {

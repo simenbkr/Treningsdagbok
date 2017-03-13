@@ -5,10 +5,14 @@ public class Utholdenhet implements Comparable<Utholdenhet>{
     private float lengde;
     private String enhet;
 
-    public Utholdenhet(int id, float lengde, String enhet) {
-        this.id = id;
+    public Utholdenhet(float lengde, String enhet) {
         this.lengde = lengde;
         this.enhet = enhet;
+    }
+
+    public Utholdenhet(int id, float lengde, String enhet) {
+        this(lengde, enhet);
+        this.id = id;
     }
 
     public int getId() {

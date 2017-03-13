@@ -17,9 +17,8 @@ public class Økt {
     }
 
     public Økt(int id, Timestamp tidspunkt, String form) {
+        this(tidspunkt, form);
         this.id = id;
-        this.tidspunkt = tidspunkt;
-        this.form = form;
     }
 
     public Økt(int id, Timestamp tidspunkt, String form, String notat) {

@@ -26,6 +26,7 @@ public class Controller {
             System.out.println("------------");
             System.out.println("statistikk - Viser statistikk for siste måned");
             System.out.println("beste - Viser beste økter");
+            System.out.println("registrer - Registrer ny økt");
             System.out.println("");
             System.out.print("> ");
             String input = scanner.nextLine();

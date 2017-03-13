@@ -16,6 +16,14 @@ public class Resultat {
         this.utholdenhet = utholdenhet;
     }
 
+    public Resultat(Styrke styrke) {
+        this.styrke = styrke;
+    }
+
+    public Resultat(Utholdenhet utholdenhet) {
+        this.utholdenhet = utholdenhet;
+    }
+
     public int getId() {
         return id;
     }
