@@ -53,7 +53,7 @@ public class ØvelseSubHandler {
                     System.out.print("> ");
                     tilskuere = Integer.valueOf(scanner.nextLine());
 
-                    if (tilskuere > 0) System.out.println("det kan ikke være et negativt antall tilskuere");
+                    if (tilskuere < 0) System.out.println("det kan ikke være et negativt antall tilskuere");
                     else break;
 
                 } catch (NumberFormatException e) {

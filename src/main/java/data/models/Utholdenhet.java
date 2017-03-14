@@ -1,7 +1,6 @@
 package data.models;
 
 import data.dao.UtholdenhetDAO;
-import data.db.DB;
 
 public class Utholdenhet implements Comparable<Utholdenhet>{
     private int id;
@@ -19,8 +18,7 @@ public class Utholdenhet implements Comparable<Utholdenhet>{
     }
 
     public static Utholdenhet createAndPersist(float lengde, String enhet) {
-        new UtholdenhetDAO().create(new Utholdenhet(lengde, enhet));
-        return new UtholdenhetDAO().getByID(DB.getLastInsertID("Utholdenhet"));
+        return new UtholdenhetDAO().getByID(new UtholdenhetDAO().create(new Utholdenhet(lengde, enhet)));
     }
 
     public int getId() {

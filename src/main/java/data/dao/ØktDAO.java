@@ -7,10 +7,7 @@ import data.mapper.ØktMapper;
 import data.models.Puls;
 import data.models.Økt;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,22 +44,28 @@ public class ØktDAO implements IDAO<Økt> {
         }
     }
 
-    public void create(Økt økt) {
+    public int create(Økt økt) {
         String sql = "INSERT INTO Økt (varighet, tidspunkt, form, prestasjon, notat) " +
                 "VALUES(?,?,?,?,?)";
+        int lastID = -1;
         try {
             Connection kobling = DB.getConnection();
-            PreparedStatement st = kobling.prepareStatement(sql);
+            PreparedStatement st = kobling.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, økt.getVarighet());
             st.setTimestamp(2, økt.getTidspunkt());
             st.setString(3, økt.getForm());
             st.setString(4, økt.getPrestasjon());
             st.setString(5, økt.getNotat());
             st.execute();
+            ResultSet rs = st.getGeneratedKeys();
+            if (rs.next()) {
+                lastID = rs.getInt(1);
+            }
             kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Økt> listAll() {

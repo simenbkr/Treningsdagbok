@@ -1,7 +1,6 @@
 package data.models;
 
 import data.dao.ResultatDAO;
-import data.db.DB;
 
 public class Resultat {
 
@@ -28,13 +27,11 @@ public class Resultat {
     }
 
     public static Resultat createAndPersist(Styrke styrke) {
-        new ResultatDAO().create(new Resultat(styrke));
-        return new ResultatDAO().getByID(DB.getLastInsertID("Resultat"));
+        return new ResultatDAO().getByID(new ResultatDAO().create(new Resultat(styrke)));
     }
 
     public static Resultat createAndPersist(Utholdenhet utholdenhet) {
-        new ResultatDAO().create(new Resultat(utholdenhet));
-        return new ResultatDAO().getByID(DB.getLastInsertID("Resultat"));
+        return new ResultatDAO().getByID(new ResultatDAO().create(new Resultat(utholdenhet)));
     }
 
     public int getId() {

@@ -5,10 +5,7 @@ import data.mapper.ØvelseMapper;
 import data.models.Kategori;
 import data.models.Øvelse;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,19 +41,25 @@ public class ØvelseDAO implements IDAO<Øvelse> {
         }
     }
 
-    public void create(Øvelse øvelse) {
+    public int create(Øvelse øvelse) {
         String SQL = "INSERT INTO Øvelse (navn, beskrivelse, type) VALUES (?, ?, ?);";
+        int lastID = -1;
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL);
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, øvelse.getNavn());
             ps.setString(2, øvelse.getBeskrivelse());
             ps.setString(3, øvelse.getType());
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Øvelse> listAll() {
@@ -93,11 +96,17 @@ public class ØvelseDAO implements IDAO<Øvelse> {
     }
 
     public Øvelse getByName(String name) {
-        String SQL = "SELECT * FROM Øvelse WHERE name=" + name;
+        String SQL = "SELECT * FROM Øvelse WHERE \'" + name + "\'";
         try {
-            ResultSet resultSet = DB.getConnection().createStatement().executeQuery(SQL);
-            return new ØvelseMapper().mapRow(resultSet, 0);
+            Connection connection = DB.getConnection();
+            ResultSet resultSet = connection.createStatement().executeQuery(SQL);
+            resultSet.beforeFirst();
+            resultSet.next();
+            Øvelse øvelse = new ØvelseMapper().mapRow(resultSet, 0);
+            connection.close();
+            return øvelse;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }

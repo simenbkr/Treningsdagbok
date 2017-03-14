@@ -4,10 +4,7 @@ import data.db.DB;
 import data.mapper.ØktTuppelMapper;
 import data.models.ØktTuppel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +12,7 @@ public class ØktTuppelDAO implements IDAO<ØktTuppel>{
 
 
     public void update(ØktTuppel øktTuppel) {
-        //TODONT DO SHIT
+        //TDONT DO SHIT
     }
 
     public void delete(ØktTuppel øktTuppel) {
@@ -32,21 +29,27 @@ public class ØktTuppelDAO implements IDAO<ØktTuppel>{
         }
     }
 
-    public void create(ØktTuppel øktTuppel) {
+    public int create(ØktTuppel øktTuppel) {
         String sql = "INSERT INTO Økt_har_Øvelse (Økt_id,Øvelse_id,Miljø_id,Resultat_id)" +
                 "VALUES(?,?,?,?)";
+        int lastID = -1;
         try {
             Connection kobling = DB.getConnection();
-            PreparedStatement st = kobling.prepareStatement(sql);
+            PreparedStatement st = kobling.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, øktTuppel.getØkt().getId());
             st.setInt(2, øktTuppel.getØvelse().getId());
             st.setInt(3, øktTuppel.getMiljø().getId());
             st.setInt(4, øktTuppel.getResultat().getId());
             st.execute();
+            ResultSet rs = st.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             kobling.close();
         } catch(SQLException e){
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<ØktTuppel> listAll() {

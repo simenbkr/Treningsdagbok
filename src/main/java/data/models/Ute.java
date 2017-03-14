@@ -1,7 +1,6 @@
 package data.models;
 
 import data.dao.UteDAO;
-import data.db.DB;
 
 public class Ute {
 
@@ -22,8 +21,7 @@ public class Ute {
     }
 
     public static Ute createAndPersist(String værforhold, String værtype, float temperatur) {
-        new UteDAO().create(new Ute(værforhold, værtype, temperatur));
-        return new UteDAO().getByID(DB.getLastInsertID("Ute"));
+        return new UteDAO().getByID(new UteDAO().create(new Ute(værforhold, værtype, temperatur)));
     }
 
     public int getId() {

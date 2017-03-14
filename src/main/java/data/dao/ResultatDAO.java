@@ -2,14 +2,9 @@ package data.dao;
 
 import data.db.DB;
 import data.mapper.ResultatMapper;
-import data.mapper.ØvelseMapper;
 import data.models.Resultat;
-import data.models.Øvelse;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,18 +38,24 @@ public class ResultatDAO implements IDAO<Resultat> {
         }
     }
 
-    public void create(Resultat resultat) {
+    public int create(Resultat resultat) {
         String SQL = "INSERT INTO Resultat (Styrke_id, Utholdenhet_id) VALUES (?, ?);";
+        int lastID = -1;
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL);
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, resultat.getStyrke() != null ? resultat.getStyrke().getId() : 0);
             ps.setInt(2, resultat.getUtholdenhet() != null ? resultat.getUtholdenhet().getId() : 0);
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Resultat> listAll() {

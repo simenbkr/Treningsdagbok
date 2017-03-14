@@ -1,7 +1,6 @@
 package data.models;
 
 import data.dao.StyrkeDAO;
-import data.db.DB;
 
 public class Styrke implements Comparable<Styrke>{
 
@@ -22,8 +21,7 @@ public class Styrke implements Comparable<Styrke>{
     }
 
     public static Styrke createAndPersist(float belastning, int reps, int sett) {
-        new StyrkeDAO().create(new Styrke(belastning, reps, sett));
-        return new StyrkeDAO().getByID(DB.getLastInsertID("Styrke"));
+        return new StyrkeDAO().getByID(new StyrkeDAO().create(new Styrke(belastning, reps, sett)));
     }
 
     public int getId() {

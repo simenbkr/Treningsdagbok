@@ -4,10 +4,7 @@ import data.db.DB;
 import data.mapper.InneMapper;
 import data.models.Inne;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,18 +38,24 @@ public class InneDAO implements IDAO<Inne> {
         }
     }
 
-    public void create(Inne inne) {
-        String SQL = "INSERT INTO Inne (luft, tilskurere) VALUES (?, ?);";
+    public int create(Inne inne) {
+        String SQL = "INSERT INTO Inne (luft, tilskuere) VALUES (?, ?);";
+        int lastID = -1;
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL);
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, inne.getLuft());
             ps.setInt(2, inne.getTilskuere());
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Inne> listAll() {

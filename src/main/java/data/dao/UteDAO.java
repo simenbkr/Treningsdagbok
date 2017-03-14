@@ -4,10 +4,7 @@ import data.db.DB;
 import data.mapper.UteMapper;
 import data.models.Ute;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,19 +39,25 @@ public class UteDAO implements IDAO<Ute> {
         }
     }
 
-    public void create(Ute ute) {
+    public int create(Ute ute) {
         String SQL = "INSERT INTO Ute (værforhold, værtype, temperatur) VALUES (?, ?, ?);";
+        int lastID = -1;
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL);
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, ute.getVærforhold());
             ps.setString(2, ute.getVærtype());
             ps.setFloat(3, ute.getTemperatur());
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Ute> listAll() {
