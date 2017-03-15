@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class BestHandler implements IHandler {
     public void handle(Scanner scanner) {
         while (true) {
-            System.out.println("(1) Styrke eller (2) utholdenhet?");
+            System.out.println("(1) Styrke, (2) utholdenhet eller (3) exit?");
             System.out.print("> ");
             String input = scanner.nextLine();
             if (input.toLowerCase().matches("^avslutt")) break;
@@ -24,6 +24,9 @@ public class BestHandler implements IHandler {
             }
             else if(input.toLowerCase().matches("^utholdenhet") || input.matches("^2")){
                 this.utholdenhetHandler(scanner);
+            }
+            else if(input.toLowerCase().matches("^exit") || input.matches("^3")) {
+                return;
             }
             else {
                 System.out.println("Ikke en gyldig kommando! Gyldige kommandoer er: 1, styrke, 2, utholdenhet");
