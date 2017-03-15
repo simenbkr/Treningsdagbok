@@ -4,10 +4,7 @@ import data.db.DB;
 import data.mapper.MiljøMapper;
 import data.models.Miljø;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +43,12 @@ public class MiljøDAO implements IDAO<Miljø> {
         }
     }
 
-    public void create(Miljø miljø) {
+    public int create(Miljø miljø) {
         String SQL = "INSERT INTO Miljø (Inne_id, Ute_id) VALUES (?, ?);";
+        int lastID = -1;
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL);
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             try {
                 ps.setInt(1, miljø.getInne().getId());
                 ps.setInt(2, 0);
@@ -59,10 +57,15 @@ public class MiljøDAO implements IDAO<Miljø> {
                 ps.setInt(2, miljø.getUte().getId());
             }
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Miljø> listAll() {

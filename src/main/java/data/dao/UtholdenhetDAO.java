@@ -4,10 +4,7 @@ import data.db.DB;
 import data.mapper.UtholdenhetMapper;
 import data.models.Utholdenhet;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,18 +38,24 @@ public class UtholdenhetDAO implements IDAO<Utholdenhet> {
         }
     }
 
-    public void create(Utholdenhet utholdenhet) {
+    public int create(Utholdenhet utholdenhet) {
         String SQL = "INSERT INTO Utholdenhet (lengde, enhet) VALUES (?, ?);";
+        int lastID = -1;
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL);
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setFloat(1, utholdenhet.getLengde());
             ps.setString(2, utholdenhet.getEnhet());
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Utholdenhet> listAll() {

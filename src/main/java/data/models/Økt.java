@@ -1,5 +1,7 @@
 package data.models;
 
+import data.dao.ØktDAO;
+
 import java.sql.Timestamp;
 
 public class Økt {
@@ -14,6 +16,7 @@ public class Økt {
     public Økt(Timestamp tidspunkt, String form) {
         this.tidspunkt = tidspunkt;
         this.form = form;
+        this.notat = "";
     }
 
     public Økt(int id, Timestamp tidspunkt, String form) {
@@ -24,6 +27,10 @@ public class Økt {
     public Økt(int id, Timestamp tidspunkt, String form, String notat) {
         this(id, tidspunkt, form);
         this.notat = notat;
+    }
+
+    public static Økt createAndPersist(Timestamp tidspunkt, String form) {
+        return new ØktDAO().getByID(new ØktDAO().create(new Økt(tidspunkt, form)));
     }
 
     public int getId(){

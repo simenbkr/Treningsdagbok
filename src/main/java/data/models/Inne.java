@@ -1,5 +1,7 @@
 package data.models;
 
+import data.dao.InneDAO;
+
 public class Inne {
 
     private int id;
@@ -7,7 +9,6 @@ public class Inne {
     private int tilskuere;
 
     public Inne(String luft, int tilskuere) {
-        this.id = id;
         this.luft = luft;
         this.tilskuere = tilskuere;
     }
@@ -15,6 +16,10 @@ public class Inne {
     public Inne(int id, String luft, int tilskuere) {
         this(luft, tilskuere);
         this.id = id;
+    }
+
+    public static Inne createAndPersist(String luft, int tilskuere) {
+        return new InneDAO().getByID(new InneDAO().create(new Inne(luft, tilskuere)));
     }
 
     public int getId() {

@@ -1,5 +1,7 @@
 package data.models;
 
+import data.dao.UteDAO;
+
 public class Ute {
 
     private int id;
@@ -16,6 +18,10 @@ public class Ute {
     public Ute(int id, String værforhold, String værtype, float temperatur) {
         this(værforhold, værtype, temperatur);
         this.id = id;
+    }
+
+    public static Ute createAndPersist(String værforhold, String værtype, float temperatur) {
+        return new UteDAO().getByID(new UteDAO().create(new Ute(værforhold, værtype, temperatur)));
     }
 
     public int getId() {

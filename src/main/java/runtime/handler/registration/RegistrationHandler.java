@@ -14,9 +14,7 @@ public class RegistrationHandler implements IHandler {
         System.out.println("Hvilken kondisjon er du i?");
         System.out.print("> ");
         String kondisjon = scanner.nextLine();
-        Økt økt = new Økt(new Timestamp(System.currentTimeMillis()), kondisjon);
-        økt.setNotat(""); //init for å kunne appende
-        new ØktDAO().create(økt);
+        Økt økt = Økt.createAndPersist(new Timestamp(System.currentTimeMillis()), kondisjon);
 
         while (true) {
             System.out.println("\nKommandoer:");

@@ -1,5 +1,7 @@
 package data.models;
 
+import data.dao.ØvelseDAO;
+
 public class Øvelse {
 
     private int id;
@@ -16,6 +18,11 @@ public class Øvelse {
     public Øvelse(int id, String navn, String beskrivelse, String type) {
         this(navn, beskrivelse, type);
         this.id = id;
+    }
+
+
+    public static Øvelse createAndPersist(String navn, String beskrivelse, String type) {
+        return new ØvelseDAO().getByID(new ØvelseDAO().create(new Øvelse(navn, beskrivelse, type)));
     }
 
     public int getId() {

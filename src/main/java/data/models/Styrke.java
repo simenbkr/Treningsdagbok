@@ -1,5 +1,7 @@
 package data.models;
 
+import data.dao.StyrkeDAO;
+
 public class Styrke implements Comparable<Styrke>{
 
     private int id;
@@ -16,6 +18,10 @@ public class Styrke implements Comparable<Styrke>{
     public Styrke(int id, float belastning, int reps, int sett) {
         this(belastning, reps, sett);
         this.id = id;
+    }
+
+    public static Styrke createAndPersist(float belastning, int reps, int sett) {
+        return new StyrkeDAO().getByID(new StyrkeDAO().create(new Styrke(belastning, reps, sett)));
     }
 
     public int getId() {

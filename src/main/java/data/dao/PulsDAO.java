@@ -4,10 +4,7 @@ import data.db.DB;
 import data.mapper.PulsMapper;
 import data.models.Puls;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +42,12 @@ public class PulsDAO implements IDAO<Puls> {
         }
     }
 
-    public void create(Puls puls) {
+    public int create(Puls puls) {
         String SQL = "INSERT INTO Puls (tid, puls, lengde, høyde, bredde, Økt_id) VALUES (?, ?, ?, ?, ?, ?);";
+        int lastID = -1;
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL);
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setTimestamp(1, puls.getTid());
             ps.setInt(2, puls.getPuls());
             ps.setDouble(3, puls.getLengde());
@@ -57,10 +55,15 @@ public class PulsDAO implements IDAO<Puls> {
             ps.setDouble(5, puls.getBredde());
             ps.setInt(6, puls.getØktId());
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Puls> listAll() {

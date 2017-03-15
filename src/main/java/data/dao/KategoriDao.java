@@ -3,14 +3,10 @@ package data.dao;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import data.db.DB;
 import data.mapper.KategoriMapper;
-import data.mapper.ØvelseMapper;
 import data.models.Kategori;
 import data.models.Øvelse;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,21 +41,30 @@ public class KategoriDao implements IDAO<Kategori> {
         }
     }
 
-    public void create(Kategori kategori) {
+    public int create(Kategori kategori) {
         String sql = "INSERT INTO Kategori (navn,foreldre_id) VALUES(?,?)";
+        int lastID = -1;
         try {
             Connection kobling = DB.getConnection();
-            PreparedStatement st = kobling.prepareStatement(sql);
+            PreparedStatement st = kobling.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, kategori.getNavn());
             st.setInt(2, kategori.getForeldreId());
             st.execute();
+            ResultSet rs = st.getGeneratedKeys();
+            if(rs.next()) {
+                lastID = rs.getInt(1);
+            }
             kobling.close();
         } catch(MySQLIntegrityConstraintViolationException e){
             try {
                 String sqlV2 = "INSERT INTO Kategori (navn) VALUES(?)";
                 Connection kobling = DB.getConnection();
-                PreparedStatement st = kobling.prepareStatement(sqlV2);
+                PreparedStatement st = kobling.prepareStatement(sqlV2, Statement.RETURN_GENERATED_KEYS);
                 st.setString(1, kategori.getNavn());
+                ResultSet rs = st.getGeneratedKeys();
+                if(rs.next()) {
+                    lastID = rs.getInt(1);
+                }
                 st.execute();
                 kobling.close();
             } catch (SQLException e1) {
@@ -69,6 +74,7 @@ public class KategoriDao implements IDAO<Kategori> {
         } catch(SQLException e){
             e.printStackTrace();
         }
+        return lastID;
     }
 
     public List<Kategori> listAll() {

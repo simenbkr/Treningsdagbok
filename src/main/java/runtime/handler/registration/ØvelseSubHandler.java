@@ -18,8 +18,6 @@ public class ØvelseSubHandler {
             System.out.print("> ");
             String description = scanner.nextLine();
 
-            //TODO kategori?
-
             String type;
             while (true) {
                 System.out.println("Er det en Styrke eller Utholdenhets øvelse?");
@@ -27,8 +25,7 @@ public class ØvelseSubHandler {
                 type = scanner.nextLine();
 
                 if (type.toLowerCase().equals("styrke") || type.toLowerCase().equals("utholdenhet")) {
-                    øvelse = new Øvelse(name, description, type);
-                    new ØvelseDAO().create(øvelse);
+                    øvelse = Øvelse.createAndPersist(name, description, type);
                     break;
                 } else {
                     System.out.println("Venligst oppgi \"styrke\" eller \"utholdenhet\" som øvelsestype.");
@@ -56,16 +53,14 @@ public class ØvelseSubHandler {
                     System.out.print("> ");
                     tilskuere = Integer.valueOf(scanner.nextLine());
 
-                    if (tilskuere > 0) System.out.println("det kan ikke være et negativt antall tilskuere");
+                    if (tilskuere < 0) System.out.println("det kan ikke være et negativt antall tilskuere");
                     else break;
 
                 } catch (NumberFormatException e) {
                     System.out.println("Venligst oppgi et heltall.");
                 }
-                Inne inne = new Inne(luft, tilskuere);
-                new InneDAO().create(inne);
-                miljø = new Miljø(inne);
-                new MiljøDAO().create(miljø);
+                Inne inne = Inne.createAndPersist(luft, tilskuere);
+                miljø = Miljø.createAndPersist(inne);
                 break;
             } else if (miljøType.toLowerCase().equals("ute")) {
 
@@ -86,10 +81,8 @@ public class ØvelseSubHandler {
                 } catch (NumberFormatException e) {
                     System.out.println("Venligst oppgi et tall (skill decimal med punktum).");
                 }
-                Ute ute = new Ute(værforhold, værtype, temperatur);
-                new UteDAO().create(ute);
-                miljø = new Miljø(ute);
-                new MiljøDAO().create(miljø);
+                Ute ute = Ute.createAndPersist(værforhold, værtype, temperatur);
+                miljø = Miljø.createAndPersist(ute);
                 break;
             } else {
                 System.out.println("Venligst oppgi \"inne\" eller \"ute\"");
@@ -138,11 +131,8 @@ public class ØvelseSubHandler {
             } catch (NumberFormatException e) {
                 System.out.println("Venligst oppgi et heltall.");
             }
-            Styrke styrke = new Styrke(belastning, reps, sett);
-            new StyrkeDAO().create(styrke);
-            resultat = new Resultat(styrke);
-            new ResultatDAO().create(resultat);
-
+            Styrke styrke = Styrke.createAndPersist(belastning, reps, sett);
+            resultat = Resultat.createAndPersist(styrke);
 
         } else if (øvelse.getType().toLowerCase().equals("utholdenhet")) {
             System.out.println("Hvilken enhet vil du måle resultatet i?");
@@ -159,10 +149,8 @@ public class ØvelseSubHandler {
             } catch (NumberFormatException e) {
                 System.out.println("Venligst oppgi et tall (skill decimal med punktum).");
             }
-            Utholdenhet utholdenhet = new Utholdenhet(lengde, enhet);
-            new UtholdenhetDAO().create(utholdenhet);
-            resultat = new Resultat(utholdenhet);
-            new ResultatDAO().create(resultat);
+            Utholdenhet utholdenhet = Utholdenhet.createAndPersist(lengde, enhet);
+            resultat = Resultat.createAndPersist(utholdenhet);
         }
 
         ØktTuppel øktTuppel = new ØktTuppel(økt, øvelse, miljø, resultat);
