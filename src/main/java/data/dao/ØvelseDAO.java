@@ -96,13 +96,15 @@ public class ØvelseDAO implements IDAO<Øvelse> {
     }
 
     public Øvelse getByName(String name) {
-        String SQL = "SELECT * FROM Øvelse WHERE \'" + name + "\'";
+        String SQL = "SELECT * FROM Øvelse WHERE navn=\"" + name + "\"";
         try {
             Connection connection = DB.getConnection();
             ResultSet resultSet = connection.createStatement().executeQuery(SQL);
             resultSet.beforeFirst();
-            resultSet.next();
-            Øvelse øvelse = new ØvelseMapper().mapRow(resultSet, 0);
+            Øvelse øvelse = null;
+            if (resultSet.next()) {
+                øvelse = new ØvelseMapper().mapRow(resultSet, 0);
+            }
             connection.close();
             return øvelse;
         } catch (SQLException e) {
