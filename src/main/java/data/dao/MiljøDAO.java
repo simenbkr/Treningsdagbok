@@ -51,9 +51,9 @@ public class MiljøDAO implements IDAO<Miljø> {
             PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             try {
                 ps.setInt(1, miljø.getInne().getId());
-                ps.setInt(2, 0);
+                ps.setString(2, null);
             } catch (NullPointerException e) {
-                ps.setInt(1, 0);
+                ps.setString(1, null);
                 ps.setInt(2, miljø.getUte().getId());
             }
             ps.execute();

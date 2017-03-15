@@ -44,8 +44,13 @@ public class ResultatDAO implements IDAO<Resultat> {
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, resultat.getStyrke() != null ? resultat.getStyrke().getId() : 0);
-            ps.setInt(2, resultat.getUtholdenhet() != null ? resultat.getUtholdenhet().getId() : 0);
+            if (resultat.getStyrke() != null) {
+                ps.setInt(1, resultat.getStyrke().getId());
+                ps.setString(2, null);
+            } else {
+                ps.setString(1, null);
+                ps.setInt(2, resultat.getUtholdenhet().getId());
+            }
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()) {
